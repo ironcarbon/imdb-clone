@@ -27,11 +27,23 @@ class ReviewCreate(generics.CreateAPIView):
         # Restrict each user to submit reviews more than ONE
         user = self.request.user
         review_queryset = Review.objects.filter(watchlist=movie, review_user=user)
+
+
         if review_queryset.exists():
             raise ValidationError("You have already reviewed this movie!")
 
+        # Calculate the rating
+        if movie.number_rating == 0:
+            movie.avg_rating = serializer.validated_data['rating']
+        else:
+            movie.avg_rating = (movie.avg_rating + serializer.validated_data['rating'])/2
+        
+        movie.number_rating = movie.number_rating + 1
+        #Whenever we want to update values for any model field object, we use model.save()
+        movie.save() 
 
-        serializer.save(watchlist=movie, review_user=review_user)
+        # Whenever we need to push all these changes, we use serializer.save
+        serializer.save(watchlist=movie, review_user=user)
 
 
 class ReviewList(generics.ListAPIView):
