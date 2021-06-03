@@ -17,8 +17,25 @@ from watchlist_app.api.serializers import StreamPlatformSerializer, WatchListSer
 
 from watchlist_app.api.throttling import ReviewListThrottle, ReviewCreateThrottle
 
-# Concreate View Class
 
+class UserReview(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+
+# Filtering Against the url(mapping value)
+    # def get_queryset(self):
+    #     username = self.kwargs['username']
+    #     return Review.objects.filter(review_user__username = username)
+        # If it is foreign key and then I want to find something else, USE DOUBLE UNDERSCORE
+
+    # Filtering against query parameters(mapping parameter)
+    def get_queryset(self):
+        username = self.request.query_params.get('username', None)
+        return Review.objects.filter(review_user__username = username)
+
+
+
+
+# Concreate View Class
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]
