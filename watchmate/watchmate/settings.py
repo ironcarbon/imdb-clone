@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'watchlist_app',
     'rest_framework',
     'rest_framework.authtoken',
-]
+    'django_filters',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -163,7 +164,10 @@ REST_FRAMEWORK = {
         'review-create': '2/day',
         'review-list': '10/day',
         'review-detail': '2/day',
-    }
+    },
+
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE': 5,
 
 }
 
